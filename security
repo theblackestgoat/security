@@ -7,15 +7,28 @@ http://10.50.29.175/classinfo.html
 Stack Username	  Password	        lin.internet
 9 	  ROCR-002-W 	72Rp737hbyMmRqU 	10.50.38.232 (this is the jump box)
 
-CTFD: http://10.50.20.250:8000
+CTFD: http://10.50.20.250:8000Creds: student :: 
+
+on lin-ops
+/usr/share/nmap/scripts 
+http-enum
+smb stuff
+smb-os-discovery
+ftp-anon
+
+ssh syntax
+ssh student@10.50.41.11 -D 9050 -L 1111:192.168.28.100:2222 -L 2222:192.168.28.100:80
+tunnel username@ipaddress dynamic port local-listener
+ssh user@localhost -p 1111 -D 9050 
 
 _____host discovery_____
 Ping Sweep (from pivot box):
 for i in {96..127}; do (ping -c 1 10.0.0.$i | grep "bytes from" &); done
 NOTE:
-You MUST calculate and replace the range, based off proper subnet calculation.
+You MUST calculate and replace the range, based off pssh student@192.168.28.120 -p 4242 -D 9050
+roper subnet calculation.
 This is Bash syntax, hence you must enter it from a Bash shell.
-Be sure to do this on ALL new subnets
+Be sure to do this on ALL new subnetsCreds: student :: 
 
 _____host enumeration_____
 Port Scan (from op station):
@@ -39,8 +52,40 @@ View the source code for all pages, to discover whether anything of
 significance that may be commented out.
 Accepts Input?
 Annotate all pages accepting user input, test for SQL injection or
-command injection vulnerability!
+command injection vulnerability!Creds: student :: 
 
+Scanning and Recon
 
+student@jump:~$ for i in {96..127}; do (ping -c 1 192.168.28.$i | grep "bytes from" &); done
+64 bytes from 192.168.28.97: icmp_seq=1 ttl=64 time=1.07 ms
+64 bytes from 192.168.28.98: icmp_seq=1 ttl=63 time=3.90 ms
+64 bytes from 192.168.28.99: icmp_seq=1 ttl=63 time=2.76 ms
+64 bytes from 192.168.28.100: icmp_seq=1 ttl=63 time=2.06 ms
+64 bytes from 192.168.28.105: icmp_seq=1 ttl=63 time=2.08 ms
+64 bytes from 192.168.28.111: icmp_seq=1 ttl=63 time=1.94 ms
+64 bytes from 192.168.28.120: icmp_seq=1 ttl=63 time=1.30 ms
+
+student@lin-ops:~/192.168.28.105$ cat ServerInitialization 
+PassTemporary
+loginfirst
+logout null bit
+houseBeatFliesLOW
+YourTempPassword
+
+	<td class="f1aG">f1rstpArt@<strong>ehndd</strong></td>
+	<td class="f1aG" style="opacity: .0;">f0urthpArt@<strong>Y2bWH</strong></td>
+	<td class="f1aG" style="opacity: .0;">s3cond0n3@<strong>cF4aa</strong></td>
+	<td class="f1aG" style="opacity: .0;">th3Fifth@<strong></strong></td>
+	<td class="f1aG">th1rd@<strong>Adpvp</strong></td>
+
+ehnddcF4aaAdpvpY2bWH
+1SE6HQPsJYrkYJL8NMXE
+
+student@grey-site-donovia-09:~$ 
+64 bytes from 192.168.150.245: icmp_seq=1 ttl=127 time=2.86 ms
+64 bytes from 192.168.150.226: icmp_seq=1 ttl=63 time=1.67 ms
+64 bytes from 192.168.150.227: icmp_seq=1 ttl=63 time=1.46 ms
+64 bytes from 192.168.150.225: icmp_seq=1 ttl=64 time=0.343 ms
+64 bytes from 192.168.150.253: icmp_seq=1 ttl=63 time=1.42 ms
 
 
