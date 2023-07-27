@@ -994,8 +994,12 @@ comrade::StudentMidwayPassword
 #f1@g = M9TLW5VjvuNquvmMU18t
 
 
-
-
+student@lin-ops:~$ ssh student@10.50.38.232 -L 1111:192.168.28.100:2222 -NT
+student@lin-ops:~$ ssh comrade@localhost -p 1111 -D 9050
+student@lin-ops:~$ proxychains ssh www-data@192.168.28.100 -p 2222
+www-data@extranet:~$ ~C
+ssh> 8888:192.168.28.9:3389
+student@lin-ops:~$ xfreerdp /v:localhost:8888 /u:comrade /p:StudentMidwayPassword /size:1920x1000 +clipboard
 
 
 
