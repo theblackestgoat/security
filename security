@@ -1096,16 +1096,54 @@ $netstat_natpu
 this forces the system to run netstat_natpu in the current directory which is now a bash shell in the current directory
 now we are root
 
+Insecure Permissions
+    CRON
+	if running as root, maybe we can hijack
+	normal for admins to create new cron jobs
+	check executables that cron jobs are pointed at to see if we can change those
+	A quick start is to enumerate all cron jobs:
+	$find /var/spool/cron/crontabs /etc/cron* -writable -ls 
+	# finds any cron file or directory that can be written to.
+    World-Writable Files and Directories
+	files that can be written to by others
+	find / -type f -perm /2 -o -type d -perm /2 2>/dev/null # Search for any file or directory that is writable by the context "other"
+	find / -type f -writable -o -type d -writable 2>/dev/null # Search for any file or directory that is writable by the current user
+    Dot '.' in PATH
 
+Vulnerable Software and Services
+    Why should you consider it for privilege escalation?
+    What commands should you run?
+	$ps -aux | grep root
+	#find services running as root
 
+Unpatched Kernel Vulnerabilities
+    Why should you consider it for privilege escalation?
+    What commands should you run?
+	$uname -r
 
+Covering your tracks
+NIX-ism
+    First thing: unset HISTFILE
+	!might not be a good idea to automatically run this
+    Need to be aware of of init system in use
+        SystemD, to name a few
+        Determines what commands to use and logging structure
 
+Ways To Figure Out Init Type
+ls -latr /proc/1/exe
+stat /sbin/init
+man init
+init --version
+ps 1
 
-
-
-
-
-
+Logs for Covering Tracks
+Logs typically housed in /var/log & useful logs:
+auth.log/secure	Logins/authentications
+lastlog		Each users' last successful login time
+btmp		Bad login attempts
+sulog		Usage of SU command
+utmp		Currently logged in users (W command)
+wtmp		Permanent record on user on/off
 
 
 
