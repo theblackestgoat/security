@@ -1536,11 +1536,110 @@ PORT     STATE SERVICE
 135/tcp  open  msrpc
 139/tcp  open  netbios-ssn
 445/tcp  open  microsoft-ds
-3389/tcp open  ms-wbt-server
+3389/tcp open  ms-wbt-serverbetween 200 and 2,000 extinctions every year.
 9999/tcp open  abyss
 
 student@lin-ops:~$ xfreerdp /v:localhost:7777 /u:Lroth /p:anotherpassword4THEages /size:1920x1000 +clipboard
 This should get us on the windows machine
+
+on the windows machine,
+check out task scheduler and services
+check Host Keys
+look to run a windows executable replacement
+rename copy pastecheck properties on services to look for file location
+look for blank description
+SecureServer.exe (as an example)
+look at task schedule
+task scheduler library
+program should run as system so it affects everyone, not just that user
+look at general, triggers, and actions
+see if you have write permision to the folder containing the executable
+rename the old .exe to old_something.exe
+make sure file name extensions and hidden items are visible
+for the new .exe that you write, run:
+python -m simpleHTTPserver 9876
+navigate to your op station's ip:9876 and download the executable you made
+slap that bad boi in the folder where you renamed the old .exe
+
+
+cmd
+look at users
+net user
+net user Lroth to get additional details
+this can also be used to check if the admin user you made works
+
+
+_____Dry Run Instructor Notes_____
+
+*either base64 or rot13*
+ssh into ops station
+in ops, open terminator and firefox
+turn off proxy for now because we're outside
+nmap unique 10.50.x.x -Pn default ports
+port 22 and 80 open
+can try running with -sV to check for services 
+use --script http-enum.nse against port 80 to see what other sites might be available
+manually enumerate the things on the site (clickable links)
+open docs to see if they contain releveant information
+if redirected to a .php site, try injection
+try url directory traversal
+../../../../../../../etc/passwd
+if you can upload documents, consider uploading .php exploits (possibly a /uploads page)
+look for a login page
+tom' or 1='1;#
+if post, try get method
+this may dump the table with usernames and passwords
+use creds that you find to get on to the next box
+READ THE LOG IN BANNER!
+if landing on a born shell, try /bin/bash to get a bash shell
+look for etc passwd, hosts, and shadow
+if new targets are found, consider that to be part of a valid network and ennumerate
+use scripts for nmap http, smb, ftpanon
+ping sweep the new network to look for more targets
+if you have a dynamic open, turn on proxy and try to navigate to new targets
+if you see tables that look like sql, try to manipulate the url
+if you can get it to dump a table, you should have a good variable (you get results you didnt actually act for)
+try to use union select 1,2,3
+consider swapping the numbers to help the data make sense (union select 1,3,2)
+grab the golden statement
+drop numbers from golden statement if you dont have enough commas
+this should show you the "shape" of the database
+look for non-unique data (databases)
+modify query to get information you want
+possibly replace one of the variable place holders with something like load_file("/etc/hosts")
+@@version might be another thing to swap out to get the sql and os version information
+use new creds pulled from the sql to re-ssh into the machine, possibly with better privs
+READ THE BANNER WHEN YOU LOG IN!
+think about what you were asked to do and the best way to go about getting that done
+can you elevate privs?
+sudo -l to see what you can do
+check gtfo bins if you can sudo something
+if not, you may need to check suid
+find perm 2000/4000/6000
+if you get in from a stick bit, don't run /bin/bash because you'll drop out of root
+make sure to ls -la once you have root to see what's there
+if you find executables, consider reverse engineering them
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
