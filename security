@@ -19,7 +19,7 @@ ftp-anon
 ssh syntax
 ssh student@10.50.41.11 -D 9050 -L 1111:192.168.28.100:2222 -L 2222:192.168.28.100:80
 tunnel username@ipaddress dynamic port local-listener
-ssh user@localhost -p 1111 -D 9050 
+ssh user@ -p 1111 -D 9050 
 
 _____host discovery_____
 Ping Sweep (from pivot box):
@@ -38,7 +38,7 @@ proxychains nmap -Pn -sT 10.0.0.X -p 22,80,443,2222,4444,9999
 *NOTE: Dynamic tunnel must be setup on PIVOT host with access to range to be scanned.
 
 _____host interrogation_____
-Banner Grab (from op station):
+Banner Grab (from op station):rick and morty full episodes
 proxychains nmap -Pn -sV 10.0.0.X -p 80
 NSE Scan (from op station):
 HTTP: proxychains nmap -Pn -sT 10.0.0.X -p 80 --script http-enum.nse
@@ -944,7 +944,7 @@ srv contains site-specific data served by your system running Red Hat Enterprise
 sys a virtual file system that contains a set of virtual files that provide an interface to the Linux kernel
 tmp has temporary stuff, globally read/write
 usr where you should install programs that are valid for your user, a secondary file hierarchy that contains shareable, read-only data
-var has variables, admin stuff, variable data, usually home to server applications
+var has variables, admin stuff, variable data, usually home to  applications
 
 find / -iname shadow -type f 2>/dev/null
 
@@ -1150,7 +1150,7 @@ wtmp		Permanent record on user on/off
 
 what is pam?
 pluggable authentication modules
-probably a good place for a backdoor
+probab192.168.28.182/forces/forcespick.php?Locations=4 UNION SELECT ly a good place for a backdoor
 
 _____CTFDs Linux Exploitation_____
 
@@ -1619,21 +1619,6 @@ find perm 2000/4000/6000
 if you get in from a stick bit, don't run /bin/bash because you'll drop out of root
 make sure to ls -la once you have root to see what's there
 if you find executables, consider reverse engineering them
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
